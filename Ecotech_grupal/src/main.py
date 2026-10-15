@@ -29,5 +29,6 @@ def main():
         else:
             print("Opción inválida. Intente nuevamente.")
 
-crear_tablas()
+crear_tablas() 
+cargar_semillas()
 main()

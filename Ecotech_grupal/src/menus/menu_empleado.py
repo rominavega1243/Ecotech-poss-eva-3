@@ -34,21 +34,22 @@ def ejecutar_menu():
 def registrar_empleado():
     while True:
         nombre = input("Nombre: ").strip()
-        if nombre.replace(" ", "").isalpha():
+        if nombre.replace(" ", "").isalpha() and len(nombre) <= 10:
             break
-        print("Error: El nombre solo puede contener letras.")
+        print("Error: El nombre solo puede contener 10 palabras.")
+
 
     while True:
         correo = input("Correo: ").strip()
-        if re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", correo):
+        if re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", correo) and len(correo) <=("@ecotech.com"):
             break
-        print("Error: Formato inválido. Ejemplo: usuario@correo.com")
+        print("Error: Formato inválido. Ejemplo: usuario@ecotech.com")
 
     while True:
         telefono = input("Teléfono: ").strip()
         if telefono.isdigit() and len(telefono) >= 8:
             break
-        print("Error: El teléfono debe contener solo números (mínimo 8).")
+        print("Error: El teléfono debe contener solo números  8.")
 
     while True:
         fecha_inicio_contrato = input("Fecha de inicio de contrato (YYYY-MM-DD): ").strip()

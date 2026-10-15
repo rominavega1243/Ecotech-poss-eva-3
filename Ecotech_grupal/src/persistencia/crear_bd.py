@@ -4,32 +4,8 @@ def crear_tablas():
     conexion = abrir_conexion()
     cursor = conexion.cursor()
 
-    # 1. Tabla empleado
-    if obtener_motor() == "sqlite":
-        sql = '''
-        CREATE TABLE IF NOT EXISTS empleado (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            correo TEXT NOT NULL UNIQUE,
-            telefono TEXT,
-            fecha_inicio_contrato TEXT,
-            salario INTEGER
-        );
-        '''
-    else:
-        sql = '''
-        CREATE TABLE IF NOT EXISTS empleado (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            nombre VARCHAR(100) NOT NULL,
-            correo VARCHAR(150) NOT NULL UNIQUE,
-            telefono VARCHAR(20),
-            fecha_inicio_contrato DATE,
-            salario DECIMAL(10, 2)
-        );
-        '''
-    cursor.execute(sql)
 
-    # 2. Tabla departamento (Se eliminó la coma sobrante)
+       # 1. Tabla departamento (Se eliminó la coma sobrante)
     if obtener_motor() == "sqlite":
         sql = '''
         CREATE TABLE IF NOT EXISTS departamento (
@@ -46,6 +22,36 @@ def crear_tablas():
             gerente VARCHAR(100)
         );
         '''
+    cursor.execute(sql)
+
+    # 2. Tabla empleado
+    if obtener_motor() == "sqlite":
+        sql = '''
+        CREATE TABLE IF NOT EXISTS empleado (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            correo TEXT NOT NULL UNIQUE,
+            telefono TEXT,
+            fecha_inicio_contrato TEXT,
+            salario INTEGER,
+            departamento_id INTEGER,
+            FOREIGN KEY (departamento_id) REFERENCES departamento(id)
+        );
+        '''
+    else:
+        sql = '''
+        CREATE TABLE IF NOT EXISTS empleado (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            nombre VARCHAR(100) NOT NULL,
+            correo VARCHAR(150) NOT NULL UNIQUE,
+            telefono VARCHAR(20),
+            fecha_inicio_contrato DATE,
+            salario DECIMAL(10, 2),
+            departamento_id INT,
+            FOREIGN KEY (departamento_id) REFERENCES departamento(id)
+        );
+        '''
+
     cursor.execute(sql)
 
     # 3. Tabla proyecto (Se eliminó fecha_inicio duplicada)
@@ -78,6 +84,10 @@ def crear_tablas():
             cantidad_horas REAL,
             tareas_realizadas TEXT,
             descripcion TEXT
+            empleado_id INTEGER,
+            proyecto_id INTEGER,
+            FOREIGN KEY (empleado_id) REFERENCES empleado(id),
+            FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
         );
         '''
     else:
@@ -88,6 +98,10 @@ def crear_tablas():
             cantidad_horas DECIMAL(4, 2),
             tareas_realizadas VARCHAR(255),
             descripcion TEXT
+            empleado_id INT,
+            proyecto_id INT,
+            FOREIGN KEY (empleado_id) REFERENCES empleado(id),
+            FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
         );
         '''
     cursor.execute(sql)
