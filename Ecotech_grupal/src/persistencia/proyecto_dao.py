@@ -18,6 +18,25 @@ class ProyectoDAO:
         return proyecto
 
     @staticmethod
+    def buscar_por_nombre(nombre):
+        conn = abrir_conexion()
+        cursor = conn.cursor()
+        marcador = marcador_sql()
+        cursor.execute(
+            f"SELECT id, nombre, descripcion, fecha_inicio FROM proyecto WHERE nombre = {marcador}",
+            (nombre,)
+        )
+        fila = cursor.fetchone()
+        conn.close()
+        if fila is None:
+            return None
+        # Retornamos un objeto Proyecto para que la semilla pueda leer proyecto.id
+        proyecto = Proyecto(nombre=fila[1], descripcion=fila[2], fecha_inicio=fila[3])
+        proyecto.id = fila[0]
+        return proyecto
+
+
+    @staticmethod
     def listar_proyectos():
         conn = abrir_conexion()
         cursor = conn.cursor()

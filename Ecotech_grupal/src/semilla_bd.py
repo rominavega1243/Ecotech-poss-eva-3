@@ -1,5 +1,11 @@
-from persistencia import DepartamentoDAO, EmpleadoDAO, ProyectoDAO, RegistroTiempoDAO
-from dominio import Empleado, Departamento,Proyecto,RegistroTiempo
+from persistencia.departamento_dao import DepartamentoDAO
+from persistencia.empleado_dao import EmpleadoDAO
+from persistencia.proyecto_dao import ProyectoDAO
+from persistencia.registro_tiempo_dao import RegistroTiempoDAO
+from dominio.empleado import Empleado
+from dominio.departamento import Departamento
+from dominio.proyecto import Proyecto
+from dominio.registro_tiempo import RegistroTiempo
 from persistencia.crear_bd import abrir_conexion
 
 
@@ -7,7 +13,7 @@ from persistencia.crear_bd import abrir_conexion
 
 def cargar_semillas():
     conexion = abrir_conexion()
-    cursor = conexion.cursor()
+
     print("Iniciando carga de semillas...")
 
     # 1. Crear 5 Departamentos
@@ -24,7 +30,7 @@ def cargar_semillas():
         depto = DepartamentoDAO.buscar_por_nombre(nombre) # Asumiendo este método
         if not depto:
             # Se asume modelo: Departamento(nombre, gerente)
-            depto = Departamento(nombre=nombre, gerente=gerente)
+            depto = Departamento(idDepartamento=None, nombre=nombre, gerente=gerente)
             DepartamentoDAO.insertar(depto)
             depto = DepartamentoDAO.buscar_por_nombre(nombre)
         departamentos_db.append(depto)
@@ -66,8 +72,7 @@ def cargar_semillas():
         empleado = EmpleadoDAO.buscar_por_correo(correo)
         if not empleado:
             # Agrupa de 4 en 4 asignando el ID del departamento
-            depto_asignado = departamentos_db[i // 4] 
-            empleado = Empleado(nombre, correo, telefono, fecha, salario, depto_asignado.id)
+            empleado = Empleado(nombre, correo, telefono, fecha, salario)
             EmpleadoDAO.insertar(empleado)
             empleado = EmpleadoDAO.buscar_por_correo(correo)
         empleados_db.append(empleado)
@@ -85,7 +90,7 @@ def cargar_semillas():
     for nombre, desc, fecha in datos_proyectos:
         proyecto = ProyectoDAO.buscar_por_nombre(nombre)
         if not proyecto:
-            proyecto = Proyecto(nombre=nombre, descripcion=desc, fecha_inicio=fecha)
+            proyecto = Proyecto(nombre, desc, fecha)
             ProyectoDAO.insertar(proyecto)
             proyecto = ProyectoDAO.buscar_por_nombre(nombre)
         proyectos_db.append(proyecto)
@@ -106,7 +111,7 @@ def cargar_semillas():
                 ("2024-04-03", 5.0, "Reunión de planificación", "Definición de KPIs", empleados_db[12].id, proyectos_db[1].id)
             ]
             for fecha, horas, tareas, desc, emp_id, proy_id in registros:
-                registro = RegistroTiempo(fecha, horas, tareas, desc, emp_id, proy_id)
+                registro = RegistroTiempo(fecha, horas, tareas, emp_id, proy_id)
                 RegistroTiempoDAO.insertar(registro)
             print(" Registros de tiempo cargados correctamente.")
         else:
@@ -115,5 +120,8 @@ def cargar_semillas():
     print(" Base de datos poblada exitosamente.")
 
 
+    
     conexion.commit()
     conexion.close()
+
+   

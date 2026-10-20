@@ -24,6 +24,21 @@ class DepartamentoDAO:
         return [Departamento(idDepartamento=row[0], nombre=row[1], gerente=row[2]) for row in rows]
 
     @staticmethod
+    def buscar_por_nombre(nombre):
+        conn = abrir_conexion()
+        cursor = conn.cursor()
+        marcador = marcador_sql()
+        cursor.execute(
+            f"SELECT id, nombre, gerente FROM departamento WHERE nombre = {marcador}",
+            (nombre,)
+        )
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return Departamento(idDepartamento=row[0], nombre=row[1], gerente=row[2])
+        return None
+
+    @staticmethod
     def buscar_por_id(id_departamento):
         conn = abrir_conexion()
         cursor = conn.cursor()

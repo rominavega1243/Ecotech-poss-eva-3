@@ -83,7 +83,7 @@ def crear_tablas():
             fecha TEXT,
             cantidad_horas REAL,
             tareas_realizadas TEXT,
-            descripcion TEXT
+            descripcion TEXT,
             empleado_id INTEGER,
             proyecto_id INTEGER,
             FOREIGN KEY (empleado_id) REFERENCES empleado(id),
@@ -97,7 +97,7 @@ def crear_tablas():
             fecha DATE,
             cantidad_horas DECIMAL(4, 2),
             tareas_realizadas VARCHAR(255),
-            descripcion TEXT
+            descripcion TEXT,
             empleado_id INT,
             proyecto_id INT,
             FOREIGN KEY (empleado_id) REFERENCES empleado(id),

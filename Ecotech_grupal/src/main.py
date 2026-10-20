@@ -3,6 +3,7 @@ from menus import menu_empleado
 from menus import menu_proyecto
 from menus import menu_departamento
 from menus import menu_registro_tiempo
+from semilla_bd import cargar_semillas
 
 def main():
     while True:

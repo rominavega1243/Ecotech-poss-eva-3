@@ -34,6 +34,23 @@ class EmpleadoDAO:
         return Empleado(id=fila[0], nombre=fila[1], correo=fila[2], telefono=fila[3], fecha_inicio_contrato=fila[4], salario=fila[5])
 
     @staticmethod
+    def buscar_por_correo(correo):
+        conexion = abrir_conexion()
+        cursor = conexion.cursor()
+        marca = marcador_sql()
+        sql = f"""
+            SELECT id, nombre, correo, telefono, fecha_inicio_contrato, salario
+            FROM empleado WHERE correo = {marca}
+        """
+        cursor.execute(sql, (correo,))
+        fila = cursor.fetchone()
+        conexion.close()
+        if fila is None:
+            return None
+        return Empleado(id=fila[0], nombre=fila[1], correo=fila[2], telefono=fila[3], fecha_inicio_contrato=fila[4], salario=fila[5])
+
+
+    @staticmethod
     def listar():
         conexion = abrir_conexion()
         cursor = conexion.cursor()
