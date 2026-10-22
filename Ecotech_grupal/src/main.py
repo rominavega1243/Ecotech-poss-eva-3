@@ -4,8 +4,9 @@ from menus import menu_proyecto
 from menus import menu_departamento
 from menus import menu_registro_tiempo
 from semilla_bd import cargar_semillas
+from menu_usuario import solicitar_login, menu_privado
 
-def main():
+def mostrar_menu_sistema():
     while True:
         print("\n=== SISTEMA ===")
         print("1. Empleados")
@@ -29,6 +30,20 @@ def main():
             break
         else:
             print("Opción inválida. Intente nuevamente.")
+
+
+def main():
+    while True:
+        usuario_actual = solicitar_login()
+        if usuario_actual is None:
+            if input("Enter para reintentar o 0 para salir: ") == "0":
+                return
+            continue
+        opcion = menu_privado(usuario_actual)
+        usuario_actual = None # Terminar el acceso de esta sesión.
+        if opcion == "0":
+            return
+        print("Sesión cerrada. Ingrese nuevamente.")
 
 crear_tablas() 
 cargar_semillas()

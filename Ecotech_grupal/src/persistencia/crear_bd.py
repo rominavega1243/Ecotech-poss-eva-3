@@ -104,7 +104,32 @@ def crear_tablas():
             FOREIGN KEY (proyecto_id) REFERENCES proyecto(id)
         );
         '''
+
     cursor.execute(sql)
+
+    # 5. Tabla usuario
+    if obtener_motor() == "sqlite":
+        sql = '''
+        CREATE TABLE IF NOT EXISTS usuario (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre_usuario TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            empleado_id INTEGER NOT NULL UNIQUE,
+            FOREIGN KEY (empleado_id) REFERENCES empleado(id) ON DELETE CASCADE
+        );
+        '''
+    else:
+        sql = '''
+        CREATE TABLE IF NOT EXISTS usuario (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            nombre_usuario VARCHAR(40) NOT NULL UNIQUE,
+            password_hash VARCHAR(255) NOT NULL,
+            empleado_id INT NOT NULL UNIQUE,
+            FOREIGN KEY (empleado_id) REFERENCES empleado(id) ON DELETE CASCADE
+        );
+        '''
+    cursor.execute(sql)
+
 
     conexion.commit()
     conexion.close()
